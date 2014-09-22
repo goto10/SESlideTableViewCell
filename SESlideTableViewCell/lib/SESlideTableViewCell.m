@@ -225,10 +225,11 @@ static UIImage* SECreateImageWithColor(UIColor* color, CGSize size) {
 #pragma mark - SESlideIndicator
 
 #define INDICATOR_LINE_WIDTH ((CGFloat)2.0)
-#define INDICATOR_MERGIN ((CGFloat)2.0)
+#define INDICATOR_MERGIN ((CGFloat)6.0)
 #define INDICATOR_WIDTH (INDICATOR_MERGIN * 3 + INDICATOR_LINE_WIDTH * 4)
 #define INDICATOR_LINE_HEIGHT0 ((CGFloat)3.0)
-#define INDICATOR_LINE_HEIGHT1 ((CGFloat)7.0)
+#define INDICATOR_LINE_HEIGHTHalf ((CGFloat)12.0)
+#define INDICATOR_LINE_HEIGHT1 ((CGFloat)21.0)
 #define INDICATOR_HEIGHT (INDICATOR_LINE_HEIGHT1)
 #define INDICATOR_OUT_MERGIN ((CGFloat)4.0)
 
@@ -260,14 +261,20 @@ typedef NS_OPTIONS(NSUInteger, SESlideIndicatorSideOption) {
 - (void)addLinesAtCGContext:(CGContextRef)context line0X:(CGFloat)line0X line1X:(CGFloat)line1X {
 	CGPathRef line0 = CGPathCreateWithRoundedRect(CGRectMake(line0X, (INDICATOR_HEIGHT - INDICATOR_LINE_HEIGHT0) * 0.5f, INDICATOR_LINE_WIDTH, INDICATOR_LINE_HEIGHT0), INDICATOR_LINE_WIDTH * 0.5f, INDICATOR_LINE_WIDTH * 0.5f, NULL);
 	
+    CGFloat lineHalfX = (line0X+line1X)/2.0;
+    
+    CGPathRef lineHalf = CGPathCreateWithRoundedRect(CGRectMake(lineHalfX, (INDICATOR_HEIGHT - INDICATOR_LINE_HEIGHTHalf) * 0.5f, INDICATOR_LINE_WIDTH, INDICATOR_LINE_HEIGHTHalf), INDICATOR_LINE_WIDTH * 0.5f, INDICATOR_LINE_WIDTH * 0.5f, NULL);
+    
 	CGPathRef line1 = CGPathCreateWithRoundedRect(CGRectMake(line1X, (INDICATOR_HEIGHT - INDICATOR_LINE_HEIGHT1) * 0.5f, INDICATOR_LINE_WIDTH, INDICATOR_LINE_HEIGHT1), INDICATOR_LINE_WIDTH * 0.5f, INDICATOR_LINE_WIDTH * 0.5f, NULL);
 	
 	
 	CGContextAddPath(context, line0);
-	CGContextAddPath(context, line1);
+	CGContextAddPath(context, lineHalf);
+    CGContextAddPath(context, line1);
 
 	CGPathRelease(line0);
-	CGPathRelease(line1);
+	CGPathRelease(lineHalf);
+    CGPathRelease(line1);
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -432,8 +439,10 @@ typedef NS_OPTIONS(NSUInteger, SESlideStateOptions) {
 		[self addSubview:indicator];
 		[self addConstraint:[NSLayoutConstraint constraintWithItem:indicator attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:INDICATOR_WIDTH]];
 		[self addConstraint:[NSLayoutConstraint constraintWithItem:indicator attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:INDICATOR_HEIGHT]];
-		[self addConstraint:[NSLayoutConstraint constraintWithItem:indicator attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:-INDICATOR_OUT_MERGIN]];
-		[self addConstraint:[NSLayoutConstraint constraintWithItem:indicator attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1 constant:-INDICATOR_OUT_MERGIN]];
+		//[self addConstraint:[NSLayoutConstraint constraintWithItem:indicator attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:-INDICATOR_OUT_MERGIN]];
+		[self addConstraint:[NSLayoutConstraint constraintWithItem:indicator attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1 constant:INDICATOR_OUT_MERGIN]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:indicator attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+        
 		m_indicator = indicator;
 	}
 	[self updateSlideIndicatorVisibility];
@@ -464,6 +473,7 @@ typedef NS_OPTIONS(NSUInteger, SESlideStateOptions) {
 			}
 			break;
 	}
+    [self updateSlideIndicatorVisibility];
 }
 
 - (void)setSlideState:(SESlideTableViewCellSlideState)slideState animated:(BOOL)animated {
