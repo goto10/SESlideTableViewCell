@@ -489,14 +489,12 @@ typedef NS_OPTIONS(NSUInteger, SESlideStateOptions) {
 
 		NSLayoutConstraint* widthConstraint = [NSLayoutConstraint constraintWithItem:indicator attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:INDICATOR_WIDTH];
 		NSLayoutConstraint* heightConstraint = [NSLayoutConstraint constraintWithItem:indicator attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1 constant:INDICATOR_HEIGHT];
-		NSLayoutConstraint* bottomConstraint = [NSLayoutConstraint constraintWithItem:indicator attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:-INDICATOR_OUT_MERGIN];
 		NSLayoutConstraint* leftConstraint = [NSLayoutConstraint constraintWithItem:indicator attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1 constant:-INDICATOR_OUT_MERGIN - self.sectionIndexWidth];
         NSLayoutConstraint* centerConstraint =[NSLayoutConstraint constraintWithItem:indicator attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0];
 
         
 		[self addConstraint:widthConstraint];
 		[self addConstraint:heightConstraint];
-		[self addConstraint:bottomConstraint];
 		[self addConstraint:leftConstraint];
         [self addConstraint:centerConstraint];
 		m_indicator = indicator;
