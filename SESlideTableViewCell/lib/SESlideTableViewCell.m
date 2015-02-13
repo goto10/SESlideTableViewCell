@@ -382,6 +382,16 @@ typedef NS_OPTIONS(NSUInteger, SESlideStateOptions) {
     return self;
 }
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    
+    if (self) {
+        [self setUp];
+    }
+    
+    return self;
+}
+
 - (void)setUp {
 	m_showsLeftSlideIndicator = YES;
 	m_showsRightSlideIndicator = YES;
